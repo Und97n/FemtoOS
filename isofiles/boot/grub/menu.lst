@@ -1,0 +1,5 @@
+default 0
+timeout 30
+
+title FemtoOS 0.1
+kernel /boot/FemtoOS.bin
