@@ -9,7 +9,8 @@ SECTIONS {
 	kernel_virtual_start = .;
 	kernel_physical_start = . - 0xC0000000;
 	
-	.text : AT(ADDR(.text) - 0xC0000000) {
+	.text ALIGN (0x1000) : AT(ADDR(.text) - 0xC0000000) {
+		*(.multiboot)
 		 *(.text)
 		 *(.rodata*)
 	}
@@ -18,7 +19,7 @@ SECTIONS {
 		 *(.data)
 	}
 
-	.bss : AT(ADDR(.bss) - 0xC0000000) {
+	.bss ALIGN (0x1000) : AT(ADDR(.bss) - 0xC0000000) {
 		 _sbss = .;
 		 *(COMMON)
 		 *(.bss)

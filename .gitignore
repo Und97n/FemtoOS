@@ -50,4 +50,5 @@ FemtoOS.bin
 modules.order
 Module.symvers
 Mkfile.old
+compiler
 dkms.conf

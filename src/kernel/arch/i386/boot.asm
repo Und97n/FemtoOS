@@ -15,6 +15,13 @@ CHECKSUM	equ -(MAGIC + FLAGS)  ; checksum required
 KERNEL_VIRTUAL_BASE equ 0xC0000000				  ; 3GB
 KERNEL_PAGE_NUMBER equ (KERNEL_VIRTUAL_BASE >> 22)  ; Page directory index of kernel's 4MB PTE.
  
+section .multiboot
+align 4
+MultiBootHeader:
+	dd MAGIC
+	dd FLAGS
+	dd CHECKSUM
+
 section .data
 align 0x1000
 BootPageDirectory:
@@ -30,15 +37,8 @@ BootPageDirectory:
 	; This page directory entry defines a 4MB page containing the kernel.
 	dd 0x00000083
 	times (1024 - KERNEL_PAGE_NUMBER - 1) dd 0  ; Pages after the kernel image.
- 
- 
+  
 section .text
-align 4
-MultiBootHeader:
-	dd MAGIC
-	dd FLAGS
-	dd CHECKSUM
- 
 ; reserve initial kernel stack space -- that's 16k.
 STACKSIZE equ 0x4000
  

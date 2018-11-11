@@ -22,14 +22,14 @@ static void timer_handler(Registers* regs) {
 }
 
 bool timer_init() {
-	uint32_t divisor = 1000;
-	frequency = MAX_FREQUENCY / divisor;
+	// uint32_t divisor = 1000;
+	// frequency = MAX_FREQUENCY / divisor;
 	
-	outb(0x43, 0x36);             /* Set our command byte 0x36 */
-	outb(0x40, divisor & 0xFF);   /* Set low byte of divisor */
-	outb(0x40, divisor >> 8); 
+	// outb(0x43, 0x36);             /* Set our command byte 0x36 */
+	// outb(0x40, divisor & 0xFF);   /* Set low byte of divisor */
+	// outb(0x40, divisor >> 8); 
 	
-	irq_install_handler(0, timer_handler);
+	// irq_install_handler(0, timer_handler);
 
 	return true;
 }

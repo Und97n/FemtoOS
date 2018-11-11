@@ -9,11 +9,11 @@
 #include <stddef.h>
 #include <stdint.h>
  
-/* Check if the compiler thinks we are targeting the wrong operating system. */
-#if defined(__linux__)
-#error "You are not using a cross-compiler, you will most certainly run into trouble"
-#endif
- 
+// /* Check if the compiler thinks we are targeting the wrong operating system. */
+// #if defined(__linux__)
+// #error "You are not using a cross-compiler, you will most certainly run into trouble"
+// #endif
+
 typedef unsigned int uint;
  
 /* This tutorial will only work for the 32-bit ix86 targets. */

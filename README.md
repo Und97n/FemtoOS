@@ -5,4 +5,4 @@ Contains main kernel(architecture dependent in "arch" folder) and simple impleme
 
 For compilation use "make.bat" (simple java program).
 It also launches QEMU emulation.
-Needed programs: i686-elf-gcc cross-compiler, JRE, mkisofs, QEMU
+Needed programs: i686-elf-gcc cross-compiler, mkisofs, QEMU

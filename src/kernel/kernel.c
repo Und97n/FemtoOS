@@ -10,12 +10,11 @@
 #include <kernel/arch.h>
 #include <kernel/multiboot.h>
 
+extern uint32_t kheap_placement_address;
+
 #if defined(__cplusplus)
 extern "C" /* Use C linkage for kernel_main. */
 #endif
-
-extern uint32_t kheap_placement_address;
-
 void kernel_main(Multiboot_Header* header) {
 	// Temporally 
 	uint32_t memory_size = 128 * 1024 * 1024;
