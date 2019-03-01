@@ -146,6 +146,32 @@ bool alloc_frame(Page *page, int is_kernel, int is_writeable, uint32_t physicalI
 
 static void page_fault(Registers* regs);
 
+int printPages() {
+	for(int i = 0; i < 1024; ++i) {
+		if(current_page_directory->tables[i]) {
+			uint32_t* pages = (uint32_t*)(current_page_directory->tables[i]->pages);
+
+			int printedPages = 0;
+
+			for(int j = 0; j < 1024; ++j) {
+				if(pages[j]) {
+					++printedPages;
+					// printf("  %08x::%08x", j, pages[j] << 12);
+				}
+
+				// if(printedPages == 4) {
+				// 	putchar('\n');
+				// 	printedPages = 0;
+				// }
+			}
+
+			printf("Page table %d. Pages count: %d\n", i, printedPages);
+		}
+	}
+
+	return 0;
+}
+
 void initialise_paging(uint32_t memory_size) {
 	// Before we do some trics, we must register our page fault handler.
 	idt_install_interrupt_handler(14, page_fault);
@@ -183,6 +209,7 @@ void initialise_paging(uint32_t memory_size) {
 	// Now, enable paging!
 	printf("KD: 0x%x\n", (&kernel_directory->tablesPhysical));
 	switch_page_directory(kernel_directory);
+	printPages();
 }
 
 void switch_page_directory(PageDirectory *dir) {
@@ -287,40 +314,30 @@ void* allocate_some_page(PageDirectory *dir, int userspace, uint32_t min_address
 	return NULL;
 }
 
+static char* page_fault_err_messages[] = {
+	"Supervisory process tried to read a non-present page entry",
+	"Supervisory process tried to read a page and caused a protection fault",
+	"Supervisory process tried to write to a non-present page entry",
+	"Supervisory process tried to write a page and caused a protection fault",
+	"User process tried to read a non-present page entry",
+	"User process tried to read a page and caused a protection fault",
+	"User process tried to write to a non-present page entry",
+	"User process tried to write a page and caused a protection fault"};
+
 static void page_fault(Registers* regs) {
 	// A page fault has occurred.
 	// The faulting address is stored in the CR2 register.
 	uint32_t faulting_address;
 	asm volatile("mov %%cr2, %0" : "=r" (faulting_address));
 	
-	// The error code gives us details of what happened.
-	int present	 = !(regs->err_code & 0x1); // Page not present
-	int rw = regs->err_code & 0x2;			 // Write operation?
-	int us = regs->err_code & 0x4;			 // Processor was in user-mode?
-	int reserved = regs->err_code & 0x8;	 // Overwritten CPU-reserved bits of page entry?
-	int id = regs->err_code & 0x10;			// Caused by an instruction fetch?
+	// // The error code gives us details of what happened.
+	// int present	 = !(regs->err_code & 0x1); // Page not present
+	// int rw = regs->err_code & 0x2;			 // Write operation?
+	// int us = regs->err_code & 0x4;			 // Processor was in user-mode?
+	// int reserved = regs->err_code & 0x8;	 // Overwritten CPU-reserved bits of page entry?
+	// int id = regs->err_code & 0x10;			// Caused by an instruction fetch?
 
-	UNUSED(id);
-
-	// Output an error message.
-	puts("\nPage fault! ( ");
-	
-	if (present) {
-		puts("present ");
-	}
-
-	if (rw) {
-		puts("read-only ");
-	}
-	
-	if (us) {
-		puts("user-mode ");
-	}
-	
-	if (reserved) {
-		puts("reserved ");
-	}
-	
-	printf(") at 0x%X\n", faulting_address);
+	printf("\nPage fault at 0x%X\n", faulting_address);
+	printf("%s\n", page_fault_err_messages[regs->err_code & 0b111]);
 	kernel_panic("Page fault.");
 }

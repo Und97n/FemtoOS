@@ -1,10 +1,10 @@
 TARGET = FemtoOS.bin
 ISOFILE = FemtoOS.iso
-CC = /opt/cross/bin/i686-elf-gcc
+CC = @/opt/cross/bin/i686-elf-gcc
 CFLAGS = -Isrc/include/ -Isrc/include/libc/ -include "stddef.h" -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 LDFLAGS = -T linker.ld -ffreestanding -nostdlib -O2
 
-.PHONY: run
+.PHONY: run clean
 
 SOURCEDIR = src/
 BUILDDIR = objects
@@ -17,21 +17,21 @@ $(BUILDDIR)/%.o: %.c
 	$(CC) -c $< -o $@ $(CFLAGS) 
 
 $(BUILDDIR)/%.o: %.asm
-	nasm -f elf32 $< -o $@
+	@nasm -f elf32 $< -o $@
 
 $(TARGET): $(OBJECTS) $(OBJECTS_ASM)
 	$(CC) $(LDFLAGS) $(OBJECTS) $(OBJECTS_ASM) -o $@ -lgcc
 
 $(ISOFILE): $(TARGET)
-	-rm isofiles/boot/FemtoOS.bin
-	cp FemtoOS.bin isofiles/boot/FemtoOS.bin
-	mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o FemtoOS.iso isofiles/
+	@-rm isofiles/boot/FemtoOS.bin
+	@cp FemtoOS.bin isofiles/boot/FemtoOS.bin
+	@mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o FemtoOS.iso isofiles/
 
 run: $(ISOFILE)
-	qemu-system-x86_64 -boot d -cdrom $(ISOFILE) -m 256
+	@qemu-system-x86_64 -boot d -cdrom $(ISOFILE) -m 256
 
 clean:
-	-rm -f $(OBJECTS)
-	-rm -f $(OBJECTS_ASM)
-	-rm -f $(TARGET)
-	-rm -f $(ISOFILE)
+	@-rm -f $(OBJECTS)
+	@-rm -f $(OBJECTS_ASM)
+	@-rm -f $(TARGET)
+	@-rm -f $(ISOFILE)

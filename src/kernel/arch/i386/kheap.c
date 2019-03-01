@@ -75,6 +75,6 @@ void* malloc(size_t size) {
 	return hmalloc(&h, size);
 }
 
-void kfree(void* mem) {
+void free(void* mem) {
 	hfree(&h, mem);
 }

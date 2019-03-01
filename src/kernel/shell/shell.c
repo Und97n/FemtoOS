@@ -186,7 +186,6 @@ void enter_shell() {
 
 	inputBufferPos = 0;
 
-	putchar('\n');
 	puts(INPUT_MARK);
 
 	while(1) {

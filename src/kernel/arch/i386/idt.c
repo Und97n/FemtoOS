@@ -116,7 +116,7 @@ void irq_remap(void) {
     outb(0xA1, 0x0);
 }
 
-const char const* exception_messages[32] = {
+const char* exception_messages[32] = {
     "Division By Zero",
     "Debug",
     "Non Maskable Interrupt",

@@ -33,28 +33,6 @@ int game3D(int argc, char** argv) {
 	return 0;
 }
 
-// extern PageDirectory* current_page_directory;
-
-// int printPages(int argc, char** argv) {
-// 	UNUSED(argc);
-// 	UNUSED(argv);
-
-// 	for(int i = 0; i < 1024; ++i) {
-// 		if(current_page_directory->tables[i]) {
-// 			printf("Page table 0x%x:\n", i);
-// 			uint32_t* pages = (uint32_t*)(current_page_directory->tables[i]->pages);
-
-// 			for(int j = 0; j < 1024; ++j) {
-// 				if(pages[j]) {
-// 					printf("    Page 0x%x: 0x%x\n", j, pages[j]);
-// 				}
-// 			}
-// 		}
-// 	}
-
-// 	return 0;
-// }
-
 int memdw(int argc, char** argv) {
 	if(argc < 2) {
 		printf("Not enought arguments.\n");

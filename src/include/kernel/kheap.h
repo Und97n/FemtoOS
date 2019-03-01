@@ -14,4 +14,4 @@ void* kmalloc(size_t size);
 
 void memory_init(size_t heap_size);
 void* malloc(size_t size);
-void kfree(void* mem);
+void free(void* mem);
